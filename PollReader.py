@@ -57,17 +57,25 @@ class PollReader():
 
 
     def highest_polling_candidate(self):
-         """
-        This method should iterate through the result columns and return
-        the name of the candidate with the highest single polling percentage
-        alongside the highest single polling percentage.
-        If equal, return the highest single polling percentage and "EVEN".
+        highest_polling_percentage = -1
+        highest_candidate = ""
 
-        Returns:
-            str: A string indicating the candidate with the highest polling percentage or EVEN,
-             and the highest polling percentage.
-        """
-        pass
+        for i in range(len(self.data_dict['Harris result'])):
+            harris = self.data_dict['Harris result'] [i]
+            trump = self.data_dict['Trump result'] [i]
+
+            if harris > highest_polling_percentage:
+                highest_polling_percentage = harris
+                highest_candidate = "Harris"
+
+            if trump > highest_polling_percentage:
+                highest_polling_percentage = trump
+                highest_candidate = "Trump"
+
+            if harris == trump and harris == highest_polling_percentage:
+                highest_candidate = "EVEN"
+
+        return highest_candidate, highest_polling_percentage
 
 
     def likely_voter_polling_average(self):
