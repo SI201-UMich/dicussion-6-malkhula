@@ -75,7 +75,7 @@ class PollReader():
             if harris == trump and harris == highest_polling_percentage:
                 highest_candidate = "EVEN"
 
-        return highest_candidate, highest_polling_percentage
+        return f"{highest_candidate} {highest_polling_percentage * 100:.1f}%"
 
 
     def likely_voter_polling_average(self):
@@ -84,7 +84,7 @@ class PollReader():
         count = 0
 
         for i in range(len(self.data_dict['sample type'])):
-            if self.data_dict['sample_type'][i] == "LV":
+            if self.data_dict['sample type'][i] == "LV":
                 harris_total += self.data_dict['Harris result'][i]
                 trump_total += self.data_dict['Trump result'][i]
                 count += 1
@@ -96,17 +96,22 @@ class PollReader():
 
 
     def polling_history_change(self):
-        """
-        Calculate the change in polling averages between the earliest and latest polls.
+        earliest_harris = self.data_dict['Harris result'][-30:]
+        earliest_trump = self.data_dict['Trump result'][-30:]
 
-        This method calculates the average result for each candidate in the earliest 30 polls
-        and the latest 30 polls, then returns the net change.
+        latest_harris = self.data_dict['Harris result'][:30]
+        latest_trump = self.data_dict['Trump result'][:30]
 
-        Returns:
-            tuple: A tuple containing the net change for Harris and Trump, in that order.
-                   Positive values indicate an increase, negative values indicate a decrease.
-        """
-        pass
+        earliest_harris_avg = sum(earliest_harris) / len(earliest_harris)
+        earliest_trump_avg = sum(earliest_trump) / len(earliest_trump)
+        latest_harris_avg = sum(latest_harris) / len(latest_harris)
+        latest_trump_avg = sum(latest_trump) / len(latest_trump)
+
+        harris_change = latest_harris_avg - earliest_harris_avg
+        trump_change = latest_trump_avg - earliest_trump_avg
+
+        return harris_change, trump_change
+
 
 
 class TestPollReader(unittest.TestCase):
